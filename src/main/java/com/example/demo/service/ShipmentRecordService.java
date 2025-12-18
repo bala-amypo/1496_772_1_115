@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.ShipmentRecord;
+import com.example.demo.entity.ShipmentRecord;
 import java.util.List;
 
 public interface ShipmentRecordService {

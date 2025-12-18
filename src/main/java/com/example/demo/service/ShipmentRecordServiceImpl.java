@@ -1,47 +1,27 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import com.example.demo.model.ShipmentRecord;
+import com.example.demo.entity.ShipmentRecord;
 import com.example.demo.repository.ShipmentRecordRepository;
+import com.example.demo.service.ShipmentRecordService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class ShipmentRecordServiceImpl implements ShipmentRecordService {
-    
+
     private final ShipmentRecordRepository repository;
-    
+
     public ShipmentRecordServiceImpl(ShipmentRecordRepository repository) {
         this.repository = repository;
     }
-    
-    @Override
-    public ShipmentRecord createShipment(ShipmentRecord shipment) {
-        return repository.save(shipment);
-    }
-    
-    @Override
+
+    public ShipmentRecord createShipment(ShipmentRecord s) { return repository.save(s); }
     public ShipmentRecord updateShipmentStatus(Long id, String status) {
-        ShipmentRecord shipment = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Shipment not found"));
-        shipment.setStatus(status);
-        return repository.save(shipment);
+        ShipmentRecord s = repository.findById(id).orElseThrow();
+        s.setStatus(status);
+        return repository.save(s);
     }
-    
-    @Override
-    public ShipmentRecord getShipmentByCode(String code) {
-        return repository.findByShipmentCode(code);
-    }
-    
-    @Override
-    public ShipmentRecord getShipmentById(Long id) {
-        return repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Shipment not found"));
-    }
-    
-    @Override
-    public List<ShipmentRecord> getAllShipments() {
-        return repository.findAll();
-    }
+    public ShipmentRecord getShipmentByCode(String code) { return repository.findByShipmentCode(code); }
+    public ShipmentRecord getShipmentById(Long id) { return repository.findById(id).orElse(null); }
+    public List<ShipmentRecord> getAllShipments() { return repository.findAll(); }
 }
-
-
