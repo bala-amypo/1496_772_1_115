@@ -1,31 +1,40 @@
+package com.example.demo.controller;  // <-- your package declaration
+
+// ----------- IMPORTS -----------
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List; // needed if using List
+import com.example.demo.model.TemperatureSensorLog; // your entity
+import com.example.demo.service.TemperatureLogService; // your service interface
+// --------------------------------
+
 @RestController
-@RequestMapping("/api/logs")
-@Tag(name = "Temperature Logs")
+@RequestMapping("/temperature")
 public class TemperatureLogController {
 
-    private final TemperatureLogService service;
+    private final TemperatureLogService temperatureLogService;
 
-    public TemperatureLogController(TemperatureLogService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public TemperatureSensorLog create(@RequestBody TemperatureSensorLog log) {
-        return service.recordLog(log);
-    }
-
-    @GetMapping("/shipment/{id}")
-    public List<TemperatureSensorLog> byShipment(@PathVariable Long id) {
-        return service.getLogsByShipment(id);
-    }
-
-    @GetMapping("/{id}")
-    public TemperatureSensorLog byId(@PathVariable Long id) {
-        return service.getLogById(id);
+    public TemperatureLogController(TemperatureLogService temperatureLogService) {
+        this.temperatureLogService = temperatureLogService;
     }
 
     @GetMapping
-    public List<TemperatureSensorLog> all() {
-        return service.getAllLogs();
+    public List<TemperatureSensorLog> getAllLogs() {
+        return temperatureLogService.getAllLogs();
+    }
+
+    @GetMapping("/{id}")
+    public TemperatureSensorLog getLogById(@PathVariable Long id) {
+        return temperatureLogService.getLogById(id);
+    }
+
+    @PostMapping
+    public TemperatureSensorLog saveLog(@RequestBody TemperatureSensorLog log) {
+        return temperatureLogService.saveLog(log);
     }
 }
