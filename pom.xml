@@ -13,7 +13,7 @@
     <name>Cold Chain Temperature Breach Alert System</name>
     <description>Spring Boot Cold Chain Monitoring System</description>
 
-    <!-- Spring Boot 3.1.5 -->
+    <!-- ✅ Spring Boot 3.1.5 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -21,6 +21,7 @@
         <relativePath/>
     </parent>
 
+    <!-- ✅ Java 17 (MANDATORY for Boot 3.x) -->
     <properties>
         <java.version>17</java.version>
         <springdoc.version>2.2.0</springdoc.version>
@@ -30,32 +31,25 @@
     <dependencies>
 
         <!-- ========================= -->
-        <!-- Spring Boot Web -->
+        <!-- Spring Core / Web -->
         <!-- ========================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
 
-        <!-- ========================= -->
-        <!-- H2 Database (in-memory for testing) -->
-        <!-- ========================= -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- ========================= -->
-        <!-- Spring Data JPA -->
-        <!-- ========================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <!-- ========================= -->
-        <!-- MySQL Driver (optional if using MySQL) -->
+        <!-- MySQL Driver -->
         <!-- ========================= -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -104,7 +98,7 @@
         </dependency>
 
         <!-- ========================= -->
-        <!-- Servlet API -->
+        <!-- Servlet API (for HttpServlet) -->
         <!-- ========================= -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -113,7 +107,7 @@
         </dependency>
 
         <!-- ========================= -->
-        <!-- Validation -->
+        <!-- Validation (optional but safe) -->
         <!-- ========================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -133,6 +127,7 @@
 
     <build>
         <plugins>
+
             <!-- ========================= -->
             <!-- Spring Boot Maven Plugin -->
             <!-- ========================= -->
@@ -140,6 +135,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
 
