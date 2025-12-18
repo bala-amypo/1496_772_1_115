@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/alerts")
 @Tag(name = "Alerts", description = "Alert management operations")
-public class AlertController {
+public class AlertRecordController {
 
     private final AlertService service;
 
