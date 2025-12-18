@@ -1,40 +1,35 @@
-package com.example.demo.controller;  // <-- your package declaration
+package com.example.demo.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+@Entity
+public class TemperatureSensorLog {
 
-import java.util.List; 
-import com.example.demo.model.TemperatureSensorLog; // your entity
-import com.example.demo.service.TemperatureLogService; // your service interface
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    private String sensorName;
+    private double temperature;
 
-@RestController
-@RequestMapping("/temperature")
-public class TemperatureLogController {
+    // Constructors
+    public TemperatureSensorLog() {}
 
-    private final TemperatureLogService temperatureLogService;
-
-    public TemperatureLogController(TemperatureLogService temperatureLogService) {
-        this.temperatureLogService = temperatureLogService;
+    public TemperatureSensorLog(String sensorName, double temperature) {
+        this.sensorName = sensorName;
+        this.temperature = temperature;
     }
 
-    @GetMapping
-    public List<TemperatureSensorLog> getAllLogs() {
-        return temperatureLogService.getAllLogs();
-    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @GetMapping("/{id}")
-    public TemperatureSensorLog getLogById(@PathVariable Long id) {
-        return temperatureLogService.getLogById(id);
-    }
+    public String getSensorName() { return sensorName; }
+    public void setSensorName(String sensorName) { this.sensorName = sensorName; }
 
-    @PostMapping
-    public TemperatureSensorLog saveLog(@RequestBody TemperatureSensorLog log) {
-        return temperatureLogService.saveLog(log);
-    }
+    public double getTemperature() { return temperature; }
+    public void setTemperature(double temperature) { this.temperature = temperature; }
 }
