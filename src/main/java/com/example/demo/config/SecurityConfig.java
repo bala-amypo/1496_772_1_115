@@ -1,19 +1,28 @@
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+package com.example.demo.config;
 
-    http
-        .csrf(csrf -> csrf.disable())
-        .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/simple-status").permitAll()
-            .requestMatchers("/api/**").permitAll()
-            .anyRequest().permitAll()   // 🔥 FIX
-        )
+@Configuration
+public class SecurityConfig {
 
-        .formLogin(form -> form.disable())
-        .httpBasic(basic -> basic.disable());
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    return http.build();
+        http
+            .csrf(csrf -> csrf.disable())
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/simple-status").permitAll()
+                .requestMatchers("/api/**").permitAll()
+                .anyRequest().permitAll()   // 🔥 fixes 403
+            )
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
+
+        return http.build();
+    }
 }
