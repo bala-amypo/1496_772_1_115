@@ -9,8 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @SpringBootApplication
 @ServletComponentScan
 @EnableJpaRepositories(basePackages = "com.example.demo.repository")
-@EntityScan(basePackages = {"com.example.demo.entity", "com.example.demo.model"})
-
+@EntityScan(basePackages = "com.example.demo.entity")  // <-- fixed
 public class DemoApplication {
 
     public static void main(String[] args) {
