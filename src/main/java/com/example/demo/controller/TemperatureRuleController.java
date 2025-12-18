@@ -15,19 +15,48 @@ import java.util.List;
 @RequestMapping("/api/rules")
 @Tag(name = "Temperature Rules", description = "Temperature rule management")
 public class TemperatureRuleController {
-    
+
     private final TemperatureRuleService service;
-    
+
     public TemperatureRuleController(TemperatureRuleService service) {
         this.service = service;
     }
-    
+
+    // Create a new temperature rule
     @PostMapping
     @Operation(summary = "Create a new temperature rule")
     public ResponseEntity<TemperatureRule> createRule(@RequestBody TemperatureRule rule) {
-        return ResponseEntity.ok(service.createRule(rule));
+        TemperatureRule savedRule = service.createRule(rule);
+        return ResponseEntity.ok(savedRule);
     }
 
-  
+    // Get all rules
+    @GetMapping
+    @Operation(summary = "Get all temperature rules")
+    public ResponseEntity<List<TemperatureRule>> getAllRules() {
+        List<TemperatureRule> rules = service.getAllRules();
+        return ResponseEntity.ok(rules);
+    }
 
+    // Get all active rules
+    @GetMapping("/active")
+    @Operation(summary = "Get all active rules")
+    public ResponseEntity<List<TemperatureRule>> getActiveRules() {
+        List<TemperatureRule> rules = service.getActiveRules();
+        return ResponseEntity.ok(rules);
+    }
+
+    // Get rule for specific product and date
+    @GetMapping("/product")
+    @Operation(summary = "Get rule for a specific product on a date")
+    public ResponseEntity<TemperatureRule> getRuleForProduct(
+            @RequestParam String productType,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        TemperatureRule rule = service.getRuleForProduct(productType, date);
+        if (rule == null) {
+            return ResponseEntity.notFound().build(); // returns 404 if no rule
+        }
+        return ResponseEntity.ok(rule);
+    }
 }
