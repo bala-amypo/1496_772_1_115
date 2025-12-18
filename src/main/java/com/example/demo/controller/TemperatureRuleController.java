@@ -1,12 +1,33 @@
-@GetMapping("/product")
-@Operation(summary = "Get rule for specific product and date")
-public ResponseEntity<TemperatureRule> getRuleForProduct(
-        @RequestParam String productType,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+package com.example.demo.controller;
+
+import com.example.demo.model.TemperatureRule;
+import com.example.demo.service.TemperatureRuleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/rules")
+@Tag(name = "Temperature Rules", description = "Temperature rule management")
+public class TemperatureRuleController {
     
-    TemperatureRule rule = service.getRuleForProduct(productType, date);
-    if (rule == null) {
-        return ResponseEntity.notFound().build();
+    private final TemperatureRuleService service;
+    
+    public TemperatureRuleController(TemperatureRuleService service) {
+        this.service = service;
     }
-    return ResponseEntity.ok(rule);
+    
+    @PostMapping
+    @Operation(summary = "Create a new temperature rule")
+    public ResponseEntity<TemperatureRule> createRule(@RequestBody TemperatureRule rule) {
+        return ResponseEntity.ok(service.createRule(rule));
+    }
+
+  
+
 }
