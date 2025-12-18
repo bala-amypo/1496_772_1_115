@@ -15,7 +15,6 @@ public class TemperatureSensorLog {
     private String sensorName;
     private double temperature;
 
-    // Constructors
     public TemperatureSensorLog() {}
 
     public TemperatureSensorLog(String sensorName, double temperature) {

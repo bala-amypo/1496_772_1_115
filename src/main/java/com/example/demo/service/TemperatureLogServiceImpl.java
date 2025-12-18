@@ -1,14 +1,32 @@
+package com.example.demo.service;
+
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+import com.example.demo.model.TemperatureSensorLog;
+import com.example.demo.repository.TemperatureSensorLogRepository;
+
 @Service
 public class TemperatureLogServiceImpl implements TemperatureLogService {
 
-    private final TemperatureSensorLogRepository repo;
+    private final TemperatureSensorLogRepository repository;
 
-    public TemperatureLogServiceImpl(TemperatureSensorLogRepository repo) {
-        this.repo = repo;
+    public TemperatureLogServiceImpl(TemperatureSensorLogRepository repository) {
+        this.repository = repository;
     }
 
-    public TemperatureSensorLog recordLog(TemperatureSensorLog log) { return repo.save(log); }
-    public List<TemperatureSensorLog> getLogsByShipment(Long id) { return repo.findByShipmentId(id); }
-    public TemperatureSensorLog getLogById(Long id) { return repo.findById(id).orElse(null); }
-    public List<TemperatureSensorLog> getAllLogs() { return repo.findAll(); }
+    @Override
+    public List<TemperatureSensorLog> getAllLogs() {
+        return repository.findAll();
+    }
+
+    @Override
+    public TemperatureSensorLog getLogById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public TemperatureSensorLog saveLog(TemperatureSensorLog log) {
+        return repository.save(log);
+    }
 }
