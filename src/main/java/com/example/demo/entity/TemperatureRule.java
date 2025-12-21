@@ -51,7 +51,14 @@ public class TemperatureRule {
         }
         return minTemp < maxTemp;
     }
-
+    @Table 
+    uniqueConstraints=@UniqueConstraints(
+           columnNames={
+           "product_type",
+           "effective_from",
+           "active"
+           }
+    )
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
