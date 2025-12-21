@@ -4,19 +4,26 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.AssertTrue;
 import java.time.LocalDate;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.persistence.Entity;
 
 @Entity
-@Table(name = "temperature_rules")
+@Table(
+    name = "temperature_rules",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {
+            "product_type",
+            "effective_from",
+            "active"
+        }
+    )
+)
 public class TemperatureRule {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @NotNull
+    @Column(name = "product_type")
     private String productType;
 
     @NotNull
@@ -27,9 +34,12 @@ public class TemperatureRule {
 
     private Boolean active;
 
+    @Column(name = "effective_from")
     private LocalDate effectiveFrom;
+
+    @Column(name = "effective_to")
     private LocalDate effectiveTo;
-    
+
     // Constructors
     public TemperatureRule() {}
 
@@ -44,8 +54,7 @@ public class TemperatureRule {
     }
 
     /**
-     * Custom validation:
-     * Ensures minTemp is less than maxTemp
+     * Rule: minTemp < maxTemp
      */
     @AssertTrue(message = "minTemp must be less than maxTemp")
     public boolean isTemperatureRangeValid() {
@@ -54,14 +63,7 @@ public class TemperatureRule {
         }
         return minTemp < maxTemp;
     }
-    @Table 
-    uniqueConstraints=@UniqueConstraints(
-           columnNames={
-           "product_type",
-           "effective_from",
-           "active"
-           }
-    )
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -84,5 +86,7 @@ public class TemperatureRule {
     }
 
     public LocalDate getEffectiveTo() { return effectiveTo; }
-    public void setEffectiveTo(LocalDate effectiveTo) { this.effectiveTo = effectiveTo; }
+    public void setEffectiveTo(LocalDate effectiveTo) {
+        this.effectiveTo = effectiveTo;
+    }
 }
