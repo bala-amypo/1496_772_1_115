@@ -58,8 +58,7 @@ public class TemperatureRuleServiceImpl implements TemperatureRuleService {
     @Override
     public TemperatureRule resolveRule(Long id) {
 
-    TemperatureRule rule = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("TemperatureRule not found with id: " + id));
+    TemperatureRule rule = repository.findById(id).orElseThrow(() -> new RuntimeException("TemperatureRule not found with id: " + id));
 
     rule.setActive(false); 
 
