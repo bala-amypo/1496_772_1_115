@@ -25,7 +25,6 @@ public class TemperatureSensorLog {
     }
     
     // Constructors
-    public TemperatureSensorLog() {}
     
     public TemperatureSensorLog(Long shipmentId, String sensorId, 
                                Double temperatureValue, String location) {
