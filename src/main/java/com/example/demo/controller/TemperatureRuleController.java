@@ -59,4 +59,9 @@ public class TemperatureRuleController {
         }
         return ResponseEntity.ok(rule);
     }
+    @PutMapping("/{id}/resolve")
+    @Operation(summary = "Resolve a breach")
+    public ResponseEntity<BreachRecord> resolveBreach(@PathVariable Long id) {
+        return ResponseEntity.ok(service.resolveBreach(id));
+    }
 }
