@@ -1,4 +1,3 @@
-// ==================== TemperatureRuleServiceImpl.java ====================
 package com.example.demo.service;
 
 import com.example.demo.model.TemperatureRule;
@@ -26,8 +25,7 @@ public class TemperatureRuleServiceImpl implements TemperatureRuleService {
     
     @Override
     public TemperatureRule updateRule(Long id, TemperatureRule rule) {
-        TemperatureRule existing = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Rule not found"));
+        TemperatureRule existing = repository.findById(id).orElseThrow(() -> new RuntimeException("Rule not found"));
         
         if (rule.getMinTemp() >= rule.getMaxTemp()) {
             throw new RuntimeException("minTemp must be less than maxTemp");
@@ -63,7 +61,7 @@ public class TemperatureRuleServiceImpl implements TemperatureRuleService {
     TemperatureRule rule = repository.findById(id)
             .orElseThrow(() -> new RuntimeException("TemperatureRule not found with id: " + id));
 
-    rule.setActive(false); // 🔴 RESOLVE = deactivate
+    rule.setActive(false); 
 
     return repository.save(rule);
 }
