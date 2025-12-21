@@ -4,7 +4,6 @@ import com.example.demo.model.AlertRecord;
 import com.example.demo.service.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,15 +35,6 @@ public class AlertRecordController {
 
         return ResponseEntity.ok(alertService.acknowledgeAlert(id));
     }
-    
-    @PutMapping("/{id}")
-    @Operation(summary = "Update an alert by ID")
-    public ResponseEntity<AlertRecord> updateAlert(
-            @PathVariable Long id,
-            @Valid @RequestBody AlertRecord alertRecord) {
-
-        return ResponseEntity.ok(alertService.updateAlert(id, alertRecord));
-    }
 
     @GetMapping("/shipment/{shipmentId}")
     @Operation(summary = "Get alerts by shipment ID")
@@ -61,3 +51,4 @@ public class AlertRecordController {
         return ResponseEntity.ok(alertService.getAllAlerts());
     }
 }
+
