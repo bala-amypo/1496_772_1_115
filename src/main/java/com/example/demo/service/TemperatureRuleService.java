@@ -12,3 +12,16 @@ public interface TemperatureRuleService {
     List<TemperatureRule> getAllRules();
 }
 
+public interface TemperatureRuleService {
+
+    TemperatureRule createRule(TemperatureRule rule);
+
+    List<TemperatureRule> getAllRules();
+
+    List<TemperatureRule> getActiveRules();
+
+    TemperatureRule getRuleForProduct(String productType, LocalDate date);
+
+    // ✅ ADD THIS
+    
+}
