@@ -36,21 +36,12 @@ public class AlertRecordController {
         return ResponseEntity.ok(alertService.acknowledgeAlert(id));
     }
 
-    // ✅ EXTRA PUT {id} — added without changing others
-    @PutMapping("/{id}")
-    @Operation(summary = "Update an alert by ID")
-    public ResponseEntity<AlertRecord> updateAlert(
-            @PathVariable Long id,
-            @RequestBody AlertRecord alertRecord) {
-
-        return ResponseEntity.ok(alertService.updateAlert(id, alertRecord));
-    }
-
     @GetMapping("/shipment/{shipmentId}")
     @Operation(summary = "Get alerts by shipment ID")
     public ResponseEntity<List<AlertRecord>> getAlertsByShipment(
             @PathVariable Long shipmentId) {
 
+        return ResponseEntity.ok(alertService.getAlertsByShipment(shipmentId));
     }
 
     @GetMapping
