@@ -22,7 +22,6 @@ public class TemperatureRuleController {
         this.service = service;
     }
 
-    // Create a new temperature rule
     @PostMapping
     @Operation(summary = "Create a new temperature rule")
     public ResponseEntity<TemperatureRule> createRule(@RequestBody TemperatureRule rule) {
@@ -30,7 +29,6 @@ public class TemperatureRuleController {
         return ResponseEntity.ok(savedRule);
     }
 
-    // Get all rules
     @GetMapping
     @Operation(summary = "Get all temperature rules")
     public ResponseEntity<List<TemperatureRule>> getAllRules() {
@@ -38,7 +36,6 @@ public class TemperatureRuleController {
         return ResponseEntity.ok(rules);
     }
 
-    // Get all active rules
     @GetMapping("/active")
     @Operation(summary = "Get all active rules")
     public ResponseEntity<List<TemperatureRule>> getActiveRules() {
@@ -46,7 +43,6 @@ public class TemperatureRuleController {
         return ResponseEntity.ok(rules);
     }
 
-    // Get rule for specific product and date
     @GetMapping("/product")
     @Operation(summary = "Get rule for a specific product on a date")
     public ResponseEntity<TemperatureRule> getRuleForProduct(
