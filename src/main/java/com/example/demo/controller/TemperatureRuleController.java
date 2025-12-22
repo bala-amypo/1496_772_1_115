@@ -55,7 +55,7 @@ public class TemperatureRuleController {
 
         TemperatureRule rule = service.getRuleForProduct(productType, date);
         if (rule == null) {
-            return ResponseEntity.notFound().build(); // returns 404 if no rule
+            return ResponseEntity.notFound().build(); 
         }
         return ResponseEntity.ok(rule);
     }
