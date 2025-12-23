@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.JwtResponse;
 import com.example.demo.model.User;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,14 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
-    // REGISTER
+    // ================= REGISTER =================
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
@@ -41,7 +45,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    // LOGIN
+    // ================= LOGIN =================
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
@@ -54,11 +58,17 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("userId", user.getId());
-        response.put("email", user.getEmail());
-        response.put("role", user.getRole());
+        // 🔐 Generate JWT
+        String token = jwtUtil.generateToken(user.getEmail());
 
-        return ResponseEntity.ok(response);
+        // ✅ Return JWT DTO (important for tests)
+        JwtResponse jwtResponse = new JwtResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return ResponseEntity.ok(jwtResponse);
     }
 }
