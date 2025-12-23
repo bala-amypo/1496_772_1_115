@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,28 +20,36 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // REGISTER
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        try {
-            User savedUser = userService.registerUser(user);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "User registered successfully");
-            response.put("userId", savedUser.getId());
-            response.put("email", savedUser.getEmail());
+        User user = new User(
+                request.getFullName(),
+                request.getEmail(),
+                request.getPassword(),
+                null
+        );
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        User savedUser = userService.registerUser(user);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "User registered successfully");
+        response.put("userId", savedUser.getId());
+        response.put("email", savedUser.getEmail());
+
+        return ResponseEntity.ok(response);
     }
 
+    // LOGIN
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
-        String email = loginRequest.get("email");
-        String password = loginRequest.get("password");
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        User user = userService.loginUser(email, password);
+        User user = userService.loginUser(
+                request.getEmail(),
+                request.getPassword()
+        );
+
         if (user == null) {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
