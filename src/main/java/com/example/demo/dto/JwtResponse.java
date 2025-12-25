@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-public class JWTResponse {
+public class JwtResponse {
 
     private String token;
     private Long userId;

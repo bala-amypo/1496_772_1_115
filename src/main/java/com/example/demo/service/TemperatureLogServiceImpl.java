@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class TemperatureSensorLogServiceImpl
         implements TemperatureSensorLogService {
 
-    private final TemperatureSensorLogRepository repo;
+    private final TemperatureLogRepository repo;
 
     public TemperatureSensorLogServiceImpl(
             TemperatureSensorLogRepository repo) {
