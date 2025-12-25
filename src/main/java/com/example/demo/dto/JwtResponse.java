@@ -3,32 +3,17 @@ package com.example.demo.dto;
 public class JwtResponse {
 
     private String token;
-    private Long userId;
-    private String email;
-    private String role;
+    private String type = "Bearer";
 
-    public JWTResponse() {}
-
-    public JWTResponse(String token, Long userId, String email, String role) {
+    public JwtResponse(String token) {
         this.token = token;
-        this.userId = userId;
-        this.email = email;
-        this.role = role;
     }
 
-    public String getToken() {
+    public String getToken() {  // ✅ return type String
         return token;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-        return role;
+    public String getType() {   // ✅ return type String
+        return type;
     }
 }
