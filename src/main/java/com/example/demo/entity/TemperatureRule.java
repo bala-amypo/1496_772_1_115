@@ -6,24 +6,14 @@ import jakarta.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 
 @Entity
-@Table(
-    name = "temperature_rules",
-    uniqueConstraints = @UniqueConstraint(
-        columnNames = {
-            "product_type",
-            "effective_from",
-            "active"
-        }
-    )
-)
+@Table(name = "temperature_rules")
 public class TemperatureRule {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @NotNull
-    @Column(name = "product_type")
     private String productType;
 
     @NotNull
@@ -34,12 +24,9 @@ public class TemperatureRule {
 
     private Boolean active;
 
-    @Column(name = "effective_from")
     private LocalDate effectiveFrom;
-
-    @Column(name = "effective_to")
     private LocalDate effectiveTo;
-
+    
     // Constructors
     public TemperatureRule() {}
 
@@ -54,7 +41,8 @@ public class TemperatureRule {
     }
 
     /**
-     * Rule: minTemp < maxTemp
+     * Custom validation:
+     * Ensures minTemp is less than maxTemp
      */
     @AssertTrue(message = "minTemp must be less than maxTemp")
     public boolean isTemperatureRangeValid() {
@@ -86,7 +74,5 @@ public class TemperatureRule {
     }
 
     public LocalDate getEffectiveTo() { return effectiveTo; }
-    public void setEffectiveTo(LocalDate effectiveTo) {
-        this.effectiveTo = effectiveTo;
-    }
+    public void setEffectiveTo(LocalDate effectiveTo) { this.effectiveTo = effectiveTo; }
 }
