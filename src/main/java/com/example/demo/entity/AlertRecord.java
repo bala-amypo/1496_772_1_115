@@ -1,9 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,59 +11,26 @@ public class AlertRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private Long shipmentId;
-
-    @NotNull
     private Long breachId;
-
-    @NotBlank
-    private String alertType;
-
-    @NotBlank
-    @Column(length = 500)
-    private String message;
-
+    private boolean acknowledged;
     private LocalDateTime sentAt;
 
-    private Boolean acknowledged;
-
-    @PrePersist
-    protected void onCreate() {
-        this.sentAt = LocalDateTime.now();
-        if (this.acknowledged == null) {
-            this.acknowledged = false;
-        }
-    }
-
-    // Constructors
     public AlertRecord() {}
 
-    public AlertRecord(Long shipmentId, Long breachId, String alertType, String message) {
+    public AlertRecord(Long shipmentId, Long breachId,
+                       boolean acknowledged, LocalDateTime sentAt) {
         this.shipmentId = shipmentId;
         this.breachId = breachId;
-        this.alertType = alertType;
-        this.message = message;
+        this.acknowledged = acknowledged;
+        this.sentAt = sentAt;
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @PrePersist
+    public void prePersist() {
+        this.acknowledged = false;
+        this.sentAt = LocalDateTime.now();
+    }
 
-    public Long getShipmentId() { return shipmentId; }
-    public void setShipmentId(Long shipmentId) { this.shipmentId = shipmentId; }
-
-    public Long getBreachId() { return breachId; }
-    public void setBreachId(Long breachId) { this.breachId = breachId; }
-
-    public String getAlertType() { return alertType; }
-    public void setAlertType(String alertType) { this.alertType = alertType; }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
-    public LocalDateTime getSentAt() { return sentAt; }
-
-    public Boolean getAcknowledged() { return acknowledged; }
-    public void setAcknowledged(Boolean acknowledged) { this.acknowledged = acknowledged; }
+    // getters & setters
 }
