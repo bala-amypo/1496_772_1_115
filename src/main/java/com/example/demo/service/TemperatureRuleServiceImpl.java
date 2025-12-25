@@ -1,68 +1,38 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import com.example.demo.model.TemperatureRule;
+import com.example.demo.entity.TemperatureRule;
 import com.example.demo.repository.TemperatureRuleRepository;
+import com.example.demo.service.TemperatureRuleService;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TemperatureRuleServiceImpl implements TemperatureRuleService {
-    
-    private final TemperatureRuleRepository repository;
-    
-    public TemperatureRuleServiceImpl(TemperatureRuleRepository repository) {
-        this.repository = repository;
+
+    private final TemperatureRuleRepository repo;
+
+    public TemperatureRuleServiceImpl(TemperatureRuleRepository repo) {
+        this.repo = repo;
     }
-    
-    @Override
+
     public TemperatureRule createRule(TemperatureRule rule) {
         if (rule.getMinTemp() >= rule.getMaxTemp()) {
-            throw new RuntimeException("minTemp must be less than maxTemp");
+            throw new IllegalArgumentException("minTemp must be less than maxTemp");
         }
-        return repository.save(rule);
-    }
-    
-    @Override
-    public TemperatureRule updateRule(Long id, TemperatureRule rule) {
-        TemperatureRule existing = repository.findById(id).orElseThrow(() -> new RuntimeException("Rule not found"));
-        
-        if (rule.getMinTemp() >= rule.getMaxTemp()) {
-            throw new RuntimeException("minTemp must be less than maxTemp");
+        if (rule.getEffectiveTo().isBefore(rule.getEffectiveFrom())) {
+            throw new IllegalArgumentException("Invalid effective date range");
         }
-        
-        existing.setProductType(rule.getProductType());
-        existing.setMinTemp(rule.getMinTemp());
-        existing.setMaxTemp(rule.getMaxTemp());
-        existing.setActive(rule.getActive());
-        existing.setEffectiveFrom(rule.getEffectiveFrom());
-        existing.setEffectiveTo(rule.getEffectiveTo());
-        
-        return repository.save(existing);
+        return repo.save(rule);
     }
-    
-    @Override
+
+    public Optional<TemperatureRule> getRuleForProduct(String product, LocalDate date) {
+        return repo.findApplicableRule(product, date);
+    }
+
     public List<TemperatureRule> getActiveRules() {
-        return repository.findByActiveTrue();
+        return repo.findByActiveTrue();
     }
-    
-    @Override
-    public TemperatureRule getRuleForProduct(String productType, LocalDate date) {
-        return repository.findApplicableRule(productType, date);
-    }
-    
-    @Override
-    public List<TemperatureRule> getAllRules() {
-        return repository.findAll();
-    }
-    @Override
-    public TemperatureRule resolveRule(Long id) {
-
-    TemperatureRule rule = repository.findById(id).orElseThrow(() -> new RuntimeException("TemperatureRule not found with id: " + id));
-
-    rule.setActive(false); 
-
-    return repository.save(rule);
-}
-
 }

@@ -1,33 +1,35 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import com.example.demo.model.User;
+import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
     public User registerUser(User user) {
-        if (repository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
+        if (repo.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
         }
-        // No password encoding in simple version
-        return repository.save(user);
+        user.setPassword(encoder.encode(user.getPassword()));
+        return repo.save(user);
     }
 
     @Override
-    public User loginUser(String email, String password) {
-        User user = repository.findByEmail(email);
-        if (user == null || !user.getPassword().equals(password)) {
-            return null; // Invalid credentials
-        }
-        return user;
+    public User findByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
