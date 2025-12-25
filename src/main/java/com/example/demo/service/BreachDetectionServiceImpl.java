@@ -1,9 +1,7 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.entity.BreachRecord;
-import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.BreachRecord;
 import com.example.demo.repository.BreachRecordRepository;
-import com.example.demo.service.BreachDetectionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,24 +9,38 @@ import java.util.List;
 @Service
 public class BreachDetectionServiceImpl implements BreachDetectionService {
 
-    private final BreachRecordRepository repo;
+    private final BreachRecordRepository repository;
 
-    public BreachDetectionServiceImpl(BreachRecordRepository repo) {
-        this.repo = repo;
+    public BreachDetectionServiceImpl(BreachRecordRepository repository) {
+        this.repository = repository;
     }
 
+    @Override
     public BreachRecord logBreach(BreachRecord breach) {
-        return repo.save(breach);
+        return repository.save(breach);
     }
 
-    public BreachRecord resolveBreach(Long id) {
-        BreachRecord b = repo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Breach not found"));
-        b.setResolved(true);
-        return repo.save(b);
-    }
-
+    @Override
     public List<BreachRecord> getBreachesByShipment(Long shipmentId) {
-        return repo.findByShipmentId(shipmentId);
+        return repository.findByShipmentId(shipmentId);
+    }
+
+    @Override
+    public BreachRecord resolveBreach(Long id) {
+        BreachRecord breach = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Breach not found"));
+        breach.setResolved(true);
+        return repository.save(breach);
+    }
+
+    @Override
+    public BreachRecord getBreachById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Breach not found"));
+    }
+
+    @Override
+    public List<BreachRecord> getAllBreaches() {
+        return repository.findAll();
     }
 }

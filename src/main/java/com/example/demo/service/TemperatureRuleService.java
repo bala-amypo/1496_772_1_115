@@ -10,7 +10,4 @@ public interface TemperatureRuleService {
     List<TemperatureRule> getActiveRules();
     TemperatureRule getRuleForProduct(String productType, LocalDate date);
     List<TemperatureRule> getAllRules();
-    TemperatureRule resolveRule(Long id);
 }
-
-
