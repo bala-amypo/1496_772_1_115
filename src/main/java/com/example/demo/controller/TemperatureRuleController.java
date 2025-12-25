@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-
 import com.example.demo.entity.TemperatureRule;
 import com.example.demo.service.TemperatureRuleService;
 import io.swagger.v3.oas.annotations.Operation;
