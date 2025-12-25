@@ -1,20 +1,42 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.AlertRecord;
+import com.example.demo.model.AlertRecord;
 import com.example.demo.repository.AlertRecordRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AlertServiceImpl implements AlertService {
 
-    private final AlertRecordRepository repo;
+    private final AlertRecordRepository repository;
 
-    public AlertServiceImpl(AlertRecordRepository repo) {
-        this.repo = repo;
+    public AlertServiceImpl(AlertRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public AlertRecord triggerAlert(AlertRecord alert) {
-        return repo.save(alert);
+        alert.setId(null); // ensure new record
+        return repository.save(alert);
+    }
+
+    @Override
+    public AlertRecord acknowledgeAlert(Long id) {
+        AlertRecord alert = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+
+        alert.setAcknowledged(true);
+        return repository.save(alert);
+    }
+
+    @Override
+    public List<AlertRecord> getAlertsByShipment(Long shipmentId) {
+        return repository.findByShipmentId(shipmentId);
+    }
+
+    @Override
+    public List<AlertRecord> getAllAlerts() {
+        return repository.findAll();
     }
 }
