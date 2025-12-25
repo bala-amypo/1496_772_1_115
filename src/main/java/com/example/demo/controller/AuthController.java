@@ -1,74 +1,59 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.JWTResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.JwtResponse;
-import com.example.demo.model.User;
+import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final UserService service;
+    private final JwtUtil jwt;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
+    public AuthController(UserService service, JwtUtil jwt) {
+        this.service = service;
+        this.jwt = jwt;
     }
 
-    // ================= REGISTER =================
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public JWTResponse register(@RequestBody RegisterRequest req) {
+        User u = new User(null, req.fullName, req.email, req.password, null);
+        User saved = service.registerUser(u);
 
-        User user = new User(
-                request.getFullName(),
-                request.getEmail(),
-                request.getPassword(),
-                null
+        String token = jwt.generateToken(
+                saved.getId(),
+                saved.getEmail(),
+                saved.getRole()
         );
 
-        User savedUser = userService.registerUser(user);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "User registered successfully");
-        response.put("userId", savedUser.getId());
-        response.put("email", savedUser.getEmail());
-
-        return ResponseEntity.ok(response);
+        return new JWTResponse(
+                token,
+                saved.getId(),
+                saved.getEmail(),
+                saved.getRole()
+        );
     }
 
-    // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public JWTResponse login(@RequestBody LoginRequest req) {
+        User u = service.findByEmail(req.email);
 
-        User user = userService.loginUser(
-                request.getEmail(),
-                request.getPassword()
+        String token = jwt.generateToken(
+                u.getId(),
+                u.getEmail(),
+                u.getRole()
         );
 
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Invalid credentials");
-        }
-
-        // 🔐 Generate JWT
-        String token = jwtUtil.generateToken(user.getEmail());
-
-        // ✅ Return JWT DTO (important for tests)
-        JwtResponse jwtResponse = new JwtResponse(
+        return new JWTResponse(
                 token,
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
+                u.getId(),
+                u.getEmail(),
+                u.getRole()
         );
-
-        return ResponseEntity.ok(jwtResponse);
     }
 }
