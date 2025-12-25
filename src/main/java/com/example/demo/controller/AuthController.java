@@ -1,59 +1,55 @@
+
 package com.example.demo.controller;
 
-import com.example.demo.dto.JWTResponse;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.entity.User;
-import com.example.demo.security.JwtUtil;
+import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService service;
-    private final JwtUtil jwt;
+    private final UserService userService;
 
-    public AuthController(UserService service, JwtUtil jwt) {
-        this.service = service;
-        this.jwt = jwt;
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/register")
-    public JWTResponse register(@RequestBody RegisterRequest req) {
-        User u = new User(null, req.fullName, req.email, req.password, null);
-        User saved = service.registerUser(u);
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            User savedUser = userService.registerUser(user);
 
-        String token = jwt.generateToken(
-                saved.getId(),
-                saved.getEmail(),
-                saved.getRole()
-        );
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "User registered successfully");
+            response.put("userId", savedUser.getId());
+            response.put("email", savedUser.getEmail());
 
-        return new JWTResponse(
-                token,
-                saved.getId(),
-                saved.getEmail(),
-                saved.getRole()
-        );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public JWTResponse login(@RequestBody LoginRequest req) {
-        User u = service.findByEmail(req.email);
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
+        String email = loginRequest.get("email");
+        String password = loginRequest.get("password");
 
-        String token = jwt.generateToken(
-                u.getId(),
-                u.getEmail(),
-                u.getRole()
-        );
+        User user = userService.loginUser(email, password);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Invalid credentials");
+        }
 
-        return new JWTResponse(
-                token,
-                u.getId(),
-                u.getEmail(),
-                u.getRole()
-        );
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", user.getId());
+        response.put("email", user.getEmail());
+        response.put("role", user.getRole());
+
+        return ResponseEntity.ok(response);
     }
 }

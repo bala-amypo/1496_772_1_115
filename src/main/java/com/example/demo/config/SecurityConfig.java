@@ -1,3 +1,4 @@
+
 package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
@@ -10,14 +11,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable()) // Disable CSRF for testing
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
+                .anyRequest().permitAll()  // Allow all endpoints without login
             )
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()));
-
+            .httpBasic(httpBasic -> httpBasic.disable()); // Disable default login form
         return http.build();
     }
 }

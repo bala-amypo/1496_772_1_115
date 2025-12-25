@@ -1,6 +1,7 @@
+
 package com.example.demo.controller;
 
-import com.example.demo.entity.TemperatureRule;
+import com.example.demo.model.TemperatureRule;
 import com.example.demo.service.TemperatureRuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +23,7 @@ public class TemperatureRuleController {
         this.service = service;
     }
 
+    // Create a new temperature rule
     @PostMapping
     @Operation(summary = "Create a new temperature rule")
     public ResponseEntity<TemperatureRule> createRule(@RequestBody TemperatureRule rule) {
@@ -29,6 +31,7 @@ public class TemperatureRuleController {
         return ResponseEntity.ok(savedRule);
     }
 
+    // Get all rules
     @GetMapping
     @Operation(summary = "Get all temperature rules")
     public ResponseEntity<List<TemperatureRule>> getAllRules() {
@@ -36,6 +39,7 @@ public class TemperatureRuleController {
         return ResponseEntity.ok(rules);
     }
 
+    // Get all active rules
     @GetMapping("/active")
     @Operation(summary = "Get all active rules")
     public ResponseEntity<List<TemperatureRule>> getActiveRules() {
@@ -43,6 +47,7 @@ public class TemperatureRuleController {
         return ResponseEntity.ok(rules);
     }
 
+    // Get rule for specific product and date
     @GetMapping("/product")
     @Operation(summary = "Get rule for a specific product on a date")
     public ResponseEntity<TemperatureRule> getRuleForProduct(
@@ -51,14 +56,8 @@ public class TemperatureRuleController {
 
         TemperatureRule rule = service.getRuleForProduct(productType, date);
         if (rule == null) {
-            return ResponseEntity.notFound().build(); 
+            return ResponseEntity.notFound().build(); // returns 404 if no rule
         }
         return ResponseEntity.ok(rule);
     }
-    @PutMapping("/{id}/resolve")
-    @Operation(summary = "Resolve (deactivate) a temperature rule")
-    public ResponseEntity<TemperatureRule> resolveRule(@PathVariable Long id) {
-    return ResponseEntity.ok(service.resolveRule(id));
-}
-
 }
