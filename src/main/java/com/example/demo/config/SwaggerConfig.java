@@ -16,31 +16,33 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
+
+        // Security scheme name
+        final String securitySchemeName = "bearerAuth";
+
         return new OpenAPI()
+                // API Info
+                .info(new Info()
+                        .title("JWT Demo API")
+                        .version("1.0")
+                        .description("Simple JWT Demo Project for Students"))
 
-            // API Info
-            .info(new Info()
-                .title("JWT Demo API")
-                .version("1.0")
-                .description("Simple JWT Demo Project for Students"))
+                // Server Configuration
+                .servers(List.of(
+                        new Server().url("https://9020.pro604cr.amypo.ai")
+                ))
 
-            // Server Configuration
-            .servers(List.of(
-                new Server().url("https://9020.pro604cr.amypo.ai/")
-            ))
+                // 🔐 Apply JWT security globally
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
 
-            // 🔑 APPLY JWT SECURITY GLOBALLY (IMPORTANT)
-            .addSecurityItem(
-                new SecurityRequirement().addList("bearerAuth")
-            )
-
-            // Security Scheme
-            .components(new Components()
-                .addSecuritySchemes("bearerAuth",
-                    new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
-                        .description("Paste JWT token here")));
+                // 🔐 Define Bearer Auth
+                .components(new Components()
+                        .addSecuritySchemes(securitySchemeName,
+                                new SecurityScheme()
+                                        .name(securitySchemeName)
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                        .description("Enter JWT token WITHOUT 'Bearer ' prefix")));
     }
 }
