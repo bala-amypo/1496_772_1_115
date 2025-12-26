@@ -109,7 +109,7 @@
             <artifactId>testng</artifactId>
             <version>7.9.0</version>
             <scope>test</scope>
-        </dependency>        
+        </dependency>
 
         <!-- ❌ REMOVE spring-boot-starter-test (JUnit) -->
         <!-- DO NOT ADD IT -->
