@@ -1,33 +1,14 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.entity.BreachRecord;
-import com.example.demo.repository.BreachRecordRepository;
-import com.example.demo.service.BreachDetectionService;
 
 import java.util.List;
 
-public class BreachDetectionServiceImpl implements BreachDetectionService {
+public interface BreachDetectionService {
 
-    private final BreachRecordRepository breachRepo;
+    BreachRecord logBreach(BreachRecord breach);
 
-    public BreachDetectionServiceImpl(BreachRecordRepository breachRepo) {
-        this.breachRepo = breachRepo;
-    }
+    BreachRecord resolveBreach(Long id);
 
-    @Override
-    public BreachRecord logBreach(BreachRecord breach) {
-        return breachRepo.save(breach);
-    }
-
-    @Override
-    public BreachRecord resolveBreach(Long id) {
-        BreachRecord breach = breachRepo.findById(id).orElseThrow();
-        breach.setResolved(true);
-        return breachRepo.save(breach);
-    }
-
-    @Override
-    public List<BreachRecord> getBreachesByShipment(Long shipmentId) {
-        return breachRepo.findByShipmentId(shipmentId);
-    }
+    List<BreachRecord> getBreachesByShipment(Long shipmentId);
 }

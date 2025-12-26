@@ -3,25 +3,37 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.ShipmentRecord;
 import com.example.demo.repository.ShipmentRecordRepository;
 import com.example.demo.service.ShipmentRecordService;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
-@Service
+import java.util.List;
+import java.util.Optional;
+
 public class ShipmentRecordServiceImpl implements ShipmentRecordService {
 
-    private final ShipmentRecordRepository repository;
+    private final ShipmentRecordRepository shipmentRepo;
 
-    public ShipmentRecordServiceImpl(ShipmentRecordRepository repository) {
-        this.repository = repository;
+    public ShipmentRecordServiceImpl(ShipmentRecordRepository shipmentRepo) {
+        this.shipmentRepo = shipmentRepo;
     }
 
-    public ShipmentRecord createShipment(ShipmentRecord s) { return repository.save(s); }
-    public ShipmentRecord updateShipmentStatus(Long id, String status) {
-        ShipmentRecord s = repository.findById(id).orElseThrow();
-        s.setStatus(status);
-        return repository.save(s);
+    @Override
+    public ShipmentRecord createShipment(ShipmentRecord shipment) {
+        return shipmentRepo.save(shipment);
     }
-    public ShipmentRecord getShipmentByCode(String code) { return repository.findByShipmentCode(code); }
-    public ShipmentRecord getShipmentById(Long id) { return repository.findById(id).orElse(null); }
-    public List<ShipmentRecord> getAllShipments() { return repository.findAll(); }
+
+    @Override
+    public ShipmentRecord updateShipmentStatus(Long id, String newStatus) {
+        ShipmentRecord shipment = shipmentRepo.findById(id).orElseThrow();
+        shipment.setStatus(newStatus);
+        return shipmentRepo.save(shipment);
+    }
+
+    @Override
+    public Optional<ShipmentRecord> getShipmentByCode(String shipmentCode) {
+        return shipmentRepo.findByShipmentCode(shipmentCode);
+    }
+
+    @Override
+    public List<ShipmentRecord> getAllShipments() {
+        return shipmentRepo.findAll();
+    }
 }
