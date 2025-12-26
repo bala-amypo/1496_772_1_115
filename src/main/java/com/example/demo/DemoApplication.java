@@ -1,18 +1,19 @@
-package com.example.demo.servlet;
+package com.example.demo;
 
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@WebServlet(urlPatterns = "/simple-status")
-public class SimpleStatusServlet extends HttpServlet {
+@SpringBootApplication
+@ServletComponentScan
+@EnableJpaRepositories(basePackages = "com.example.demo.repository")
+@EntityScan(basePackages = {"com.example.demo.entity", "com.example.demo.model"})
+ 
+public class DemoApplication {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter()
-            .write("Cold Chain Temperature Breach Alert System is running");
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
     }
 }
