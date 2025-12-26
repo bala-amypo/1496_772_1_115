@@ -21,20 +21,29 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    public ResponseEntity<AuthResponse> login(LoginRequest req) {
+    public ResponseEntity<AuthResponse> login(LoginRequest request) {
         authenticationManager.authenticate(null);
-        User u = userService.findByEmail(req.getEmail());
-        String token = jwtUtil.generateToken(u.getId(), u.getEmail(), u.getRole());
+        User user = userService.findByEmail(request.getEmail());
+        String token = jwtUtil.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
-    public ResponseEntity<AuthResponse> register(RegisterRequest req) {
+    public ResponseEntity<AuthResponse> register(RegisterRequest request) {
         User u = new User();
-        u.setFullName(req.getFullName());
-        u.setEmail(req.getEmail());
-        u.setPassword(req.getPassword());
+        u.setFullName(request.getFullName());
+        u.setEmail(request.getEmail());
+        u.setPassword(request.getPassword());
+
         User saved = userService.registerUser(u);
-        String token = jwtUtil.generateToken(saved.getId(), saved.getEmail(), saved.getRole());
+        String token = jwtUtil.generateToken(
+                saved.getId(),
+                saved.getEmail(),
+                saved.getRole()
+        );
         return ResponseEntity.ok(new AuthResponse(token));
     }
 }
