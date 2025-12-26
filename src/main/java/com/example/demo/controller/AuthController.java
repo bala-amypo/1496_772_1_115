@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
-import com.example.demo.model.User;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class AuthController {
 
     public ResponseEntity<AuthResponse> login(LoginRequest request) {
         authenticationManager.authenticate(null);
+
         User user = userService.findByEmail(request.getEmail());
         String token = jwtUtil.generateToken(
                 user.getId(),
@@ -33,12 +36,12 @@ public class AuthController {
     }
 
     public ResponseEntity<AuthResponse> register(RegisterRequest request) {
-        User u = new User();
-        u.setFullName(request.getFullName());
-        u.setEmail(request.getEmail());
-        u.setPassword(request.getPassword());
+        User user = new User();
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
 
-        User saved = userService.registerUser(u);
+        User saved = userService.registerUser(user);
         String token = jwtUtil.generateToken(
                 saved.getId(),
                 saved.getEmail(),
