@@ -10,7 +10,6 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final long expiration;
 
-    // THIS CONSTRUCTOR IS REQUIRED BY TEST FILE
     public JwtUtil(String secretKey, long expiration) {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes());
         this.expiration = expiration;

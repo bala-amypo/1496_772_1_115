@@ -11,9 +11,7 @@ public interface BreachDetectionService {
 
     List<BreachRecord> getBreachesByShipment(Long shipmentId);
 
-    // ✅ REQUIRED by controller
     BreachRecord getBreachById(Long id);
 
-    // ✅ REQUIRED by controller
     List<BreachRecord> getAllBreaches();
 }

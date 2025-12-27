@@ -9,9 +9,7 @@ public interface TemperatureLogService {
 
     List<TemperatureSensorLog> getLogsByShipment(Long shipmentId);
 
-    // ✅ REQUIRED by controller
     List<TemperatureSensorLog> getAllLogs();
 
-    // ✅ REQUIRED by controller
     TemperatureSensorLog getLogById(Long id);
 }
