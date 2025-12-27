@@ -18,7 +18,7 @@ public class BreachDetectionServiceImpl implements BreachDetectionService {
 
     @Override
     public BreachRecord logBreach(BreachRecord breach) {
-        return breachRepo.save(breach); // ✅ no validation
+        return breachRepo.save(breach); 
     }
 
     @Override
