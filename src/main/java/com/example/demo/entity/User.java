@@ -38,7 +38,6 @@ public class User {
         if (role == null) role = "MONITOR";
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

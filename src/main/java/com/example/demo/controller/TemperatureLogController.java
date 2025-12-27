@@ -43,7 +43,7 @@ public class TemperatureLogController {
                 temperatureLogService.getLogById(id);
 
         if (log == null) {
-            return ResponseEntity.badRequest().build(); // ✅ FIX
+            return ResponseEntity.badRequest().build(); 
         }
 
         return ResponseEntity.ok(log);

@@ -22,13 +22,10 @@ public class TemperatureRuleController {
         this.service = service;
     }
 
-    // ✅ POST /api/rules - Create rule
     @PostMapping
     public TemperatureRule create(@RequestBody TemperatureRule rule) {
         return service.createRule(rule);
     }
-
-    // ✅ PUT /api/rules/{id} - Update rule
     @PutMapping("/{id}")
     public TemperatureRule update(
             @PathVariable Long id,
@@ -37,20 +34,16 @@ public class TemperatureRuleController {
         return service.updateRule(id, rule);
     }
 
-    // ✅ GET /api/rules - List all rules
     @GetMapping
     public List<TemperatureRule> getAllRules() {
         return service.getAllRules();
     }
 
-    // ✅ GET /api/rules/active - Get active rules
     @GetMapping("/active")
     public List<TemperatureRule> getActive() {
         return service.getActiveRules();
     }
 
-    // ✅ GET /api/rules/product/{productType}
-    // ✅ Optional date parameter
     @GetMapping("/product/{productType}")
     public Optional<TemperatureRule> getRuleByProduct(
             @PathVariable String productType,
