@@ -47,9 +47,9 @@ public class AuthController {
         User saved = userService.registerUser(
             new User(null, req.getFullName(), req.getEmail(), req.getPassword(), "MONITOR")
         );
-
+       
         String token = jwtUtil.generateToken(saved.getId(), saved.getEmail(), saved.getRole());
-
+     
         return ResponseEntity.ok(new LoginResponse(token));
     }
 }
