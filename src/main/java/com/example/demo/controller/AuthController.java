@@ -51,7 +51,8 @@ public class AuthController {
     emailService.sendWelcomeEmail(saved.getEmail(), saved.getFullName());
 
     return ResponseEntity.ok("Registration successful. Email sent to user.");
+    }
 }
 
-    }
+ 
 
