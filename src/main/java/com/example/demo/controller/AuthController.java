@@ -42,14 +42,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest req) {
+    public ResponseEntity<String> register(@RequestBody RegisterRequest req) {
 
-        User saved = userService.registerUser(
-            new User(null, req.getFullName(), req.getEmail(), req.getPassword(), "MONITOR")
-        );
-       
-        String token = jwtUtil.generateToken(saved.getId(), saved.getEmail(), saved.getRole());
-     
-        return ResponseEntity.ok(new LoginResponse(token));
-    }
+    User saved = userService.registerUser(
+        new User(null, req.getFullName(), req.getEmail(), req.getPassword(), "MONITOR")
+    );
+
+    emailService.sendWelcomeEmail(saved.getEmail(), saved.getFullName());
+
+    return ResponseEntity.ok("Registration successful. Email sent to user.");
 }
+
+    }
+
