@@ -1,17 +1,26 @@
 package com.example.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginResponse {
 
-    @JsonIgnore
     private String token;
-
     private String message;
 
+    // ✅ Used for LOGIN (token visible)
     public LoginResponse(String token) {
         this.token = token;
-        this.message = "Registration successful";
+    }
+
+    // ✅ Used for REGISTER (message only)
+    public LoginResponse(String message, boolean isRegister) {
+        this.message = message;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public String getMessage() {
